@@ -1,0 +1,93 @@
+'use client'
+
+import {useRouter} from 'next/navigation'
+import {useState} from 'react'
+
+export default function Login(): React.ReactElement {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError(null)
+
+    if (!email || !password) {
+      setError('Veuillez remplir tous les champs.')
+      return
+    }
+
+    try {
+      const body = {
+        email: email,
+        password: password,
+      }
+      const response = await fetch(`http://localhost:8000/login/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+        credentials: 'include',
+      })
+      console.log(response)
+
+      const datas = {status: response.status, logInfo: await response.json()}
+
+      console.log(datas)
+      if (datas.status == 401) {
+        setError('Combinaison Email mot de passe invalide')
+      } else if (datas.status == 200) {
+        const role = datas.logInfo.user.role
+        const url = role == 'elder' ? '/elder/dashboard' : '/volunteer/dashboard'
+        router.push(url)
+      }
+    } catch {
+      setError('Échec de la connexion. Veuillez réessayer.')
+    }
+  }
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4">
+      <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg">
+        <h1 className="mb-6 text-2xl font-bold text-center text-gray-800">Connexion</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Adresse e-mail
+            </label>
+            <input
+              id="email"
+              type="email"
+              className="mt-1 w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Mot de passe
+            </label>
+            <input
+              id="password"
+              type="password"
+              className="mt-1 w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          {error && <p className="text-sm text-red-600">{error}</p>}
+
+          <button type="submit" className="w-full rounded-md bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700 transition">
+            Se connecter
+          </button>
+        </form>
+      </div>
+    </div>
+  )
+}
