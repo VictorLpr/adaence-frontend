@@ -1,5 +1,6 @@
 'use client'
 import {useEffect, useState} from 'react'
+import { useAuthGuard } from '../../../hooks/useAuthGuard'
 
 interface RdvApi {
   id: number
@@ -20,6 +21,12 @@ interface RdvApi {
 export default function Dashboard() {
   const [appointments, setAppointments] = useState<RdvApi[]>([])
   const [loading, setLoading] = useState(true)
+  
+  const { user, isAuthorized } = useAuthGuard('volunteer')
+
+  if (!isAuthorized) {
+    return <div>Chargement...</div>
+  }
 
   useEffect(() => {
     const fetchData = async () => {
