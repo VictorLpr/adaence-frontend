@@ -57,11 +57,11 @@ export default function GuideDuPartage() {
     <section className="flex flex-col max-w-5xl mx-3">
       <h2 className="text-3xl font-bold mb-6 text-center">Le Guide du Partage</h2>
       <p className="text-center">Ces 8 valeurs définissent l’esprit de notre communauté. Elles guident chaque rencontre, chaque moment partagé.</p>
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 p-2">
         {guidePoints.map(({keyword, icon: Icon, description}) => (
-          <Card key={keyword} className="shadow-md hover:shadow-lg transition overflow-hidden">
-            <CardContent className=" flex gap-4 items-start rounded-2xl">
-              <div className=" rounded-full">
+          <Card key={keyword} className=" flex flex-col shadow-md hover:shadow-lg transition overflow-hidden">
+            <CardContent className="flex gap-4 items-center rounded-2xl">
+              <div className="pl-2 text-(--accent-color) rounded-full">
                 <Icon className="w-6 h-6" />
               </div>
               <div>
