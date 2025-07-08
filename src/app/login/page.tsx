@@ -2,12 +2,17 @@
 
 import {useRouter} from 'next/navigation'
 import {useState} from 'react'
+import { useAuth } from '../../contexts/AuthContext'
 
 export default function Login(): React.ReactElement {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
+  const { login, logout, isAuthenticated, user, isLoading } = useAuth()
+  
+
+  console.log('Login Page - Debug:', { isAuthenticated, user, isLoading })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -40,12 +45,61 @@ export default function Login(): React.ReactElement {
         setError('Combinaison Email mot de passe invalide')
       } else if (datas.status == 200) {
         const role = datas.logInfo.user.role
+        const userType = role 
+        const token = datas.logInfo.token || 'dummy-token' // Utilisez le vrai token de votre API
+        const userId = datas.logInfo.user.id || 'user-id'
+        const userName = datas.logInfo.user.name || datas.logInfo.user.email
+
+        // Utiliser le contexte d'authentification pour connecter l'utilisateur
+        login(userType, userId, userName)
+
         const url = role == 'elder' ? '/elder/dashboard' : '/volunteer/dashboard'
         router.push(url)
       }
     } catch {
       setError('Échec de la connexion. Veuillez réessayer.')
     }
+  }
+
+  if (isAuthenticated && user) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4">
+        <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg text-center">
+          <h1 className="mb-6 text-2xl font-bold text-gray-800">Déjà connecté</h1>
+          <p className="mb-4 text-gray-600">
+            Vous êtes déjà connecté en tant que <strong>{user.name}</strong> ({user.type === 'volunteer' ? 'Bénévole' : 'Senior'})
+          </p>
+          <div className="space-y-3">
+            <button
+              onClick={() => {
+                const dashboardUrl = user.type === 'volunteer' ? '/volunteer/dashboard' : '/elder/dashboard'
+                router.push(dashboardUrl)
+              }}
+              className="w-full rounded-md bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700 transition"
+            >
+              Aller au tableau de bord
+            </button>
+            <button
+              onClick={logout}
+              className="w-full rounded-md bg-gray-600 px-4 py-2 font-semibold text-white hover:bg-gray-700 transition"
+            >
+              Se déconnecter et se reconnecter
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-2 text-gray-600">Vérification de l'authentification...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -87,6 +141,8 @@ export default function Login(): React.ReactElement {
             Se connecter
           </button>
         </form>
+        
+
       </div>
     </div>
   )
