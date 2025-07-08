@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import {useState} from 'react'
-import {House, Accessibility, BookOpen, HandHelping, Menu, X} from 'lucide-react'
+import {House, Accessibility, BookOpen, HandHelping, Menu, X, Coffee, HeartHandshake} from 'lucide-react'
 import {usePathname} from 'next/navigation'
 import '../styles/navbar.css'
 
@@ -15,8 +15,8 @@ export default function Navbar(): React.ReactElement {
 
   return (
     <nav className="navbar">
-      <div className="navbar-title">
-        🍵Time<span>Well</span>Spent
+      <div className="navbar-title flex flex-row items-center text-2xl font-bold">
+        <Coffee ></Coffee>Time<span className='text-(--secondary-color)'>Well</span>Spent
       </div>
 
       <button className="burger" onClick={toggleMenu}>
@@ -46,14 +46,14 @@ export default function Navbar(): React.ReactElement {
         </li>
         <li className="don-mobile">
           <div className="don">
-            <Link href="/don">Faire un don 🫶 </Link>
+            <Link href="/don">Faire un don  </Link>
           </div>
         </li>
       </ul>
 
       <div className="don-desktop">
         <div className="don">
-          <Link href="/don">Faire un don 🫶 </Link>
+          <Link href="/don">Faire un don <HeartHandshake></HeartHandshake></Link>
         </div>
       </div>
     </nav>

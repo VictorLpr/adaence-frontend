@@ -2,12 +2,12 @@
 
 import Link from 'next/link'
 import {useState} from 'react'
-import {House, Accessibility, BookOpen, HandHelping, Menu, X, Coffee, HeartHandshake, LogOut, User} from 'lucide-react'
+import {House, Calendar, MessageCircle, Settings, Menu, X, Coffee, LogOut} from 'lucide-react'
 import {usePathname} from 'next/navigation'
 import { useAuth } from '../../../contexts/AuthContext'
 import '../../../styles/navbar.css'
 
-export default function VolunteerNavbar(): React.ReactElement {
+export default function ElderNavbar(): React.ReactElement {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState<boolean>(false)
   const { user, logout } = useAuth()
@@ -22,8 +22,8 @@ export default function VolunteerNavbar(): React.ReactElement {
 
   return (
     <nav className="navbar">
-      <div className="flex flex-row items-center text-2xl font-bold ">
-        <Coffee/>Time<span className='text-(--secondary-color)'>Well</span>Spent
+      <div className="navbar-title flex flex-row items-center text-2xl font-bold">
+        <Coffee />Time<span className='text-(--secondary-color)'>Well</span>Spent
       </div>
 
       <button className="burger" onClick={toggleMenu}>
@@ -32,29 +32,24 @@ export default function VolunteerNavbar(): React.ReactElement {
 
       <ul className={`nav-links ${menuOpen ? 'open' : ''}`}>
         <li>
-          <Link href="/volunteer/dashboard" onClick={closeMenu} className={pathname === '/volunteer/dashboard' ? 'disabled' : ''}>
-            <House /> Dashboard
+          <Link href="/elder/dashboard" onClick={closeMenu} className={pathname === '/elder/dashboard' ? 'disabled' : ''}>
+            <House /> Mon tableau de bord
           </Link>
         </li>
         <li>
-          <Link href="/volunteer/visite" onClick={closeMenu} className={pathname === '/volunteer/visite' ? 'disabled' : ''}>
-            <Accessibility /> Je rends visite
+          <Link href="/elder/rencontres" onClick={closeMenu} className={pathname === '/elder/rencontres' ? 'disabled' : ''}>
+            <Calendar /> Mes rencontres
           </Link>
         </li>
         <li>
-          <Link href="/guide" onClick={closeMenu} className={pathname === '/guide' ? 'disabled' : ''}>
-            <BookOpen /> Guide du partage
+          <Link href="/elder/messages" onClick={closeMenu} className={pathname === '/elder/messages' ? 'disabled' : ''}>
+            <MessageCircle /> Messages
           </Link>
         </li>
         <li>
-          <Link href="/volunteer/profile" onClick={closeMenu} className={pathname === '/volunteer/profile' ? 'disabled' : ''}>
-            <User /> Mon profil
+          <Link href="/elder/profil" onClick={closeMenu} className={pathname === '/elder/profil' ? 'disabled' : ''}>
+            <Settings /> Mon profil
           </Link>
-        </li>
-        <li className="don-mobile">
-          <div className="don">
-            <Link href="/don">Faire un don 🫶 </Link>
-          </div>
         </li>
         <li className="don-mobile">
           <button onClick={handleLogout} className="logout-btn">
