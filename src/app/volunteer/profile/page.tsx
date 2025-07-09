@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useAuthGuard } from '../../../hooks/useAuthGuard'
+import {useState, useEffect} from 'react'
+import {useAuthGuard} from '../../../hooks/useAuthGuard'
+import {Input} from '@/components/ui/input'
 
 interface VolunteerProfile {
   id: number
@@ -23,7 +24,7 @@ interface VolunteerProfile {
 }
 
 export default function VolunteerProfile() {
-  const { user, isAuthorized, isLoading } = useAuthGuard('volunteer')
+  const {user, isAuthorized, isLoading} = useAuthGuard('volunteer')
   const [profile, setProfile] = useState<VolunteerProfile | null>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [isSaving, setSaving] = useState(false)
@@ -38,7 +39,7 @@ export default function VolunteerProfile() {
     city_title: '',
     city_zipcode: '',
     phone_number: '',
-    url_image: ''
+    url_image: '',
   })
 
   // Charger le profil du volunteer
@@ -46,7 +47,7 @@ export default function VolunteerProfile() {
     try {
       const response = await fetch(`http://localhost:8000/api/v1/volunteers/`, {
         method: 'GET',
-        credentials: 'include' // Utilise automatiquement les cookies HTTP-only
+        credentials: 'include', // Utilise automatiquement les cookies HTTP-only
       })
 
       if (!response.ok) {
@@ -55,10 +56,10 @@ export default function VolunteerProfile() {
 
       let data = await response.json()
       data = data.results[0]
-      console.log('Profil récupéré:', data);
-      
+      console.log('Profil récupéré:', data)
+
       setProfile(data)
-      
+
       // Pré-remplir le formulaire
       setFormData({
         first_name: data.user.first_name || '',
@@ -67,7 +68,7 @@ export default function VolunteerProfile() {
         city_title: data.city?.title || '',
         city_zipcode: data.city?.zipcode || '',
         phone_number: data.phone_number || '',
-        url_image: data.url_image || ''
+        url_image: data.url_image || '',
       })
     } catch (err) {
       setError('Impossible de charger le profil')
@@ -88,27 +89,27 @@ export default function VolunteerProfile() {
       const response = await fetch(`http://localhost:8000/api/v1/volunteers/${profile.id}/`, {
         method: 'PATCH',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         credentials: 'include', // Utilise automatiquement les cookies HTTP-only
         body: JSON.stringify({
           user: {
             first_name: formData.first_name,
             last_name: formData.last_name,
-            ...(formData.password && { password: formData.password })
+            ...(formData.password && {password: formData.password}),
           },
           city: {
             title: formData.city_title,
-            zipcode: formData.city_zipcode
+            zipcode: formData.city_zipcode,
           },
           phone_number: formData.phone_number,
-          url_image: formData.url_image
-        })
+          url_image: formData.url_image,
+        }),
       })
 
       const updatedData = await response.json()
-      console.log('Profil mis à jour:', updatedData);
-      
+      console.log('Profil mis à jour:', updatedData)
+
       if (!response.ok) {
         throw new Error('Erreur lors de la sauvegarde')
       }
@@ -126,8 +127,8 @@ export default function VolunteerProfile() {
 
   // Gérer les changements du formulaire
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
+    const {name, value} = e.target
+    setFormData((prev) => ({...prev, [name]: value}))
   }
 
   // Annuler les modifications
@@ -140,7 +141,7 @@ export default function VolunteerProfile() {
         city_title: profile.city?.title || '',
         city_zipcode: profile.city?.zipcode || '',
         phone_number: profile.phone_number || '',
-        url_image: profile.url_image || ''
+        url_image: profile.url_image || '',
       })
     }
     setIsEditing(false)
@@ -186,22 +187,19 @@ export default function VolunteerProfile() {
             {!isEditing ? (
               <button
                 onClick={() => setIsEditing(true)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                className="bg-(--secondary-color) text-white px-4 py-2 rounded-md hover:bg-(--btn-accent-bg) transition"
               >
                 ✏️ Modifier
               </button>
             ) : (
               <div className="space-x-2">
-                <button
-                  onClick={handleCancel}
-                  className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition"
-                >
+                <button onClick={handleCancel} className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-(--btn-primary-hover-bg) transition">
                   Annuler
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={isSaving}
-                  className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition disabled:opacity-50"
+                  className="bg-(--secondary-color) text-white px-4 py-2 rounded-md hover:bg-(--btn-accent-bg) transition disabled:opacity-50"
                 >
                   {isSaving ? 'Sauvegarde...' : '💾 Sauvegarder'}
                 </button>
@@ -228,111 +226,44 @@ export default function VolunteerProfile() {
             {/* Informations personnelles */}
             <div className="space-y-4">
               <h2 className="text-lg font-semibold text-gray-800 border-b pb-2">Informations personnelles</h2>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
-                <input
-                  type="text"
-                  name="first_name"
-                  value={formData.first_name}
-                  onChange={handleInputChange}
-                  disabled={!isEditing}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                />
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
-                <input
-                  type="text"
-                  name="last_name"
-                  value={formData.last_name}
-                  onChange={handleInputChange}
-                  disabled={!isEditing}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                />
-              </div>
+              <Input label="Prénom" name="first_name" value={formData.first_name} onChange={handleInputChange} disabled={!isEditing} />
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input
-                  type="email"
-                  value={profile.user.email}
-                  disabled={true}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-100 text-gray-600"
-                />
-                <p className="text-xs text-gray-500 mt-1">L'email ne peut pas être modifié</p>
-              </div>
+              <Input label="Nom" name="last_name" value={formData.last_name} onChange={handleInputChange} disabled={!isEditing} />
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nouveau mot de passe</label>
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  disabled={!isEditing}
-                  placeholder={isEditing ? "Laissez vide pour ne pas changer" : ""}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                />
-                {isEditing && (
-                  <p className="text-xs text-gray-500 mt-1">Laissez vide si vous ne souhaitez pas changer le mot de passe</p>
-                )}
-              </div>
+              <Input
+                label="Email"
+                name="email"
+                type="email"
+                value={profile.user.email}
+                onChange={() => {}} // Email non modifiable
+                disabled={true}
+                helpText="L'email ne peut pas être modifié"
+              />
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
-                <input
-                  type="tel"
-                  name="phone_number"
-                  value={formData.phone_number}
-                  onChange={handleInputChange}
-                  disabled={!isEditing}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                />
-              </div>
+              <Input
+                label="Nouveau mot de passe"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                disabled={!isEditing}
+                placeholder={isEditing ? 'Laissez vide pour ne pas changer' : ''}
+                helpText={isEditing ? 'Laissez vide si vous ne souhaitez pas changer le mot de passe' : undefined}
+              />
+
+              <Input label="Téléphone" name="phone_number" type="tel" value={formData.phone_number} onChange={handleInputChange} disabled={!isEditing} />
             </div>
 
             {/* Ville et photo */}
             <div className="space-y-4">
               <h2 className="text-lg font-semibold text-gray-800 border-b pb-2">Localisation et photo</h2>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Ville</label>
-                <input
-                  type="text"
-                  name="city_title"
-                  value={formData.city_title}
-                  onChange={handleInputChange}
-                  disabled={!isEditing}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                />
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Code postal</label>
-                <input
-                  type="text"
-                  name="city_zipcode"
-                  value={formData.city_zipcode}
-                  onChange={handleInputChange}
-                  disabled={!isEditing}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                />
-              </div>
+              <Input label="Ville" name="city_title" value={formData.city_title} onChange={handleInputChange} disabled={!isEditing} />
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">URL de la photo</label>
-                <input
-                  type="url"
-                  name="url_image"
-                  value={formData.url_image}
-                  onChange={handleInputChange}
-                  disabled={!isEditing}
-                  placeholder=""
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                />
-              </div>
+              <Input label="Code postal" name="city_zipcode" value={formData.city_zipcode} onChange={handleInputChange} disabled={!isEditing} />
+
+              <Input label="URL de la photo" name="url_image" type="url" value={formData.url_image} onChange={handleInputChange} disabled={!isEditing} />
 
               {/* Aperçu de la photo */}
               {formData.url_image && (
@@ -350,28 +281,6 @@ export default function VolunteerProfile() {
               )}
             </div>
           </div>
-
-          {/* Informations du compte */}
-          {!isEditing && (
-            <div className="mt-8 pt-6 border-t border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-800 mb-4">Informations du compte</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
-                <div>
-                  <strong>ID:</strong> {profile.id}
-                </div>
-                <div>
-                  <strong>Rôle:</strong> {profile.user.role}
-                </div>
-                {profile.city && (
-                  <>
-                    <div>
-                      <strong>Coordonnées:</strong> {profile.city.lat}, {profile.city.lng}
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-          )}
         </form>
       </div>
     </div>
