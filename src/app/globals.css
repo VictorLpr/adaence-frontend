@@ -75,8 +75,10 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
+  color: var(--primary-color);
   height: 100px;
   width: 100%;
+  background-color: var(--color-gray-800);
 
 }
 
@@ -88,6 +90,7 @@ li {
 .nav-links {
   display: flex;
   align-items: center;
+
   margin: 0;
 
 }
@@ -116,7 +119,8 @@ li {
 }
 
 .navbar a {
-  color: var(--heading-color);
+    color: var(--primary-color);
+
   text-decoration: none;
   font-weight: bold;
   display: flex;
@@ -140,16 +144,12 @@ main {
 
 .header-home {
   position: relative;
-  height: 520px;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  @media screen and (min-width:768px) {
-    height: 390px;
 
-  }
 }
 
 .search-bar {
