@@ -4,13 +4,13 @@ import Link from 'next/link'
 import {useState} from 'react'
 import {House, Accessibility, BookOpen, HandHelping, Menu, X, Coffee, HeartHandshake, LogOut, User} from 'lucide-react'
 import {usePathname} from 'next/navigation'
-import { useAuth } from '../../../contexts/AuthContext'
+import {useAuth} from '../../../contexts/AuthContext'
 import '../../../styles/navbar.css'
 
 export default function VolunteerNavbar(): React.ReactElement {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState<boolean>(false)
-  const { user, logout } = useAuth()
+  const {user, logout} = useAuth()
 
   const toggleMenu = (): void => setMenuOpen(!menuOpen)
   const closeMenu = (): void => setMenuOpen(false)
@@ -23,7 +23,8 @@ export default function VolunteerNavbar(): React.ReactElement {
   return (
     <nav className="navbar">
       <div className="flex flex-row items-center text-2xl font-bold ">
-        <Coffee/>Time<span className='text-(--secondary-color)'>Well</span>Spent
+        <Coffee />
+        Time<span className="text-(--secondary-color)">Well</span>Spent
       </div>
 
       <button className="burger" onClick={toggleMenu}>
