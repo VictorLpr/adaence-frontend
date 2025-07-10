@@ -7,11 +7,10 @@ import {useAuth} from '../../contexts/AuthContext'
 export default function Login(): React.ReactElement {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
-  const {login, logout, isAuthenticated, user, isLoading} = useAuth()
-
-  console.log('Login Page - Debug:', {isAuthenticated, user, isLoading})
+  const {login, logout, isAuthenticated, user} = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -23,6 +22,7 @@ export default function Login(): React.ReactElement {
     }
 
     try {
+      setLoading(true)
       const body = {
         email: email,
         password: password,
@@ -35,11 +35,9 @@ export default function Login(): React.ReactElement {
         body: JSON.stringify(body),
         credentials: 'include',
       })
-      console.log(response)
 
       const datas = {status: response.status, logInfo: await response.json()}
 
-      console.log(datas)
       if (datas.status == 401) {
         setError('Combinaison Email mot de passe invalide')
       } else if (datas.status == 200) {
@@ -85,17 +83,6 @@ export default function Login(): React.ReactElement {
     )
   }
 
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-2 text-gray-600">Vérification de l'authentification...</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4">
       <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg">
@@ -131,9 +118,10 @@ export default function Login(): React.ReactElement {
 
           {error && <p className="text-sm text-red-600">{error}</p>}
 
-          <button type="submit" className="w-full rounded-md bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700 transition">
+          <button type="submit" className="w-full rounded-md bg-(--secondary-color) px-4 py-2 font-semibold text-white hover:bg-(--accent-color) transition">
             Se connecter
           </button>
+          {loading && <div>Chargement en cours..</div>}
         </form>
       </div>
     </div>
