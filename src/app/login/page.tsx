@@ -2,17 +2,16 @@
 
 import {useRouter} from 'next/navigation'
 import {useState} from 'react'
-import { useAuth } from '../../contexts/AuthContext'
+import {useAuth} from '../../contexts/AuthContext'
 
 export default function Login(): React.ReactElement {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
-  const { login, logout, isAuthenticated, user, isLoading } = useAuth()
-  
+  const {login, logout, isAuthenticated, user, isLoading} = useAuth()
 
-  console.log('Login Page - Debug:', { isAuthenticated, user, isLoading })
+  console.log('Login Page - Debug:', {isAuthenticated, user, isLoading})
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -45,12 +44,10 @@ export default function Login(): React.ReactElement {
         setError('Combinaison Email mot de passe invalide')
       } else if (datas.status == 200) {
         const role = datas.logInfo.user.role
-        const userType = role 
-        const token = datas.logInfo.token || 'dummy-token' // Utilisez le vrai token de votre API
+        const userType = role
         const userId = datas.logInfo.user.id || 'user-id'
         const userName = datas.logInfo.user.name || datas.logInfo.user.email
 
-        // Utiliser le contexte d'authentification pour connecter l'utilisateur
         login(userType, userId, userName)
 
         const url = role == 'elder' ? '/elder/dashboard' : '/volunteer/dashboard'
@@ -79,10 +76,7 @@ export default function Login(): React.ReactElement {
             >
               Aller au tableau de bord
             </button>
-            <button
-              onClick={logout}
-              className="w-full rounded-md bg-gray-600 px-4 py-2 font-semibold text-white hover:bg-gray-700 transition"
-            >
+            <button onClick={logout} className="w-full rounded-md bg-gray-600 px-4 py-2 font-semibold text-white hover:bg-gray-700 transition">
               Se déconnecter et se reconnecter
             </button>
           </div>
@@ -141,8 +135,6 @@ export default function Login(): React.ReactElement {
             Se connecter
           </button>
         </form>
-        
-
       </div>
     </div>
   )
