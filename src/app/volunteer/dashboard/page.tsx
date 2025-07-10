@@ -35,7 +35,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 w-9/10">
       <h1 className="text-2xl font-bold mb-4">Mes rendez-vous</h1>
 
       <Tabs activeTab={activeTab} onTabChange={setActiveTab} />
@@ -43,11 +43,11 @@ export default function Dashboard() {
       {currentAppointments.length === 0 ? (
         <EmptyState activeTab={activeTab} />
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+          <div className="min-h-[400px]">
             <AppointmentList appointments={currentAppointments} selectedAppointment={selectedAppointment} onSelectAppointment={setSelectedAppointment} />
           </div>
-          <div>
+          <div className="min-h-[400px]">
             <AppointmentDetails appointment={selectedAppointment} />
           </div>
         </div>

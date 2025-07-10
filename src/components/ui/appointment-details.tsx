@@ -7,12 +7,14 @@ interface AppointmentDetailsProps {
 export function AppointmentDetails({appointment}: AppointmentDetailsProps) {
   if (!appointment) {
     return (
-      <div className="border rounded-lg p-6 shadow-sm bg-gray-50 text-center text-gray-500">Cliquez sur un rendez-vous pour voir les détails de l'elder</div>
+      <div className="border rounded-lg p-6 shadow-sm bg-gray-50 text-center text-gray-500 h-full flex items-center justify-center">
+        Cliquez sur un rendez-vous pour voir les détails de l'elder
+      </div>
     )
   }
 
   return (
-    <div className="border rounded-lg p-6 shadow-sm bg-white sticky top-6">
+    <div className="border rounded-lg p-6 shadow-sm bg-white h-full">
       <h3 className="text-xl font-semibold mb-4">
         Détails de {appointment.elder_detail.user.first_name} {appointment.elder_detail.user.last_name}
       </h3>
