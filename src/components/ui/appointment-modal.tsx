@@ -24,7 +24,7 @@ export function AppointmentModal({
   onCancel,
 }: AppointmentModalProps) {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg p-6 max-w-md w-full">
         <h3 className="text-xl font-semibold mb-4">
           Prendre rendez-vous avec {elder.user.first_name} {elder.user.last_name}

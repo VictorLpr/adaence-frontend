@@ -7,9 +7,10 @@ interface AppointmentDetailsProps {
 export function AppointmentDetails({appointment}: AppointmentDetailsProps) {
   if (!appointment) {
     return (
-      <div className="border rounded-lg p-6 shadow-sm bg-gray-50 text-center text-gray-500 h-full flex items-center justify-center">
-        Cliquez sur un rendez-vous pour voir les détails de l'elder
-      </div>
+      <></>
+      // <div className="border rounded-lg p-6 shadow-sm bg-gray-50 text-center text-gray-500 h-full flex items-center justify-center">
+      //   Cliquez sur un rendez-vous pour voir les détails
+      // </div>
     )
   }
 
